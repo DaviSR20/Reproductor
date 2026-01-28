@@ -1,13 +1,57 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList } from "react-native";
 import SideMenu from "../components/SideMenu";
+import VideoCard from "../components/VideoCard";
+import FloatingAddButton from "../components/FloatingAddButton";
+
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { db } from "../Firebase/firebase";
 
 export default function HomeScreen({ navigation }) {
+  const [videos, setVideos] = useState([]);
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const q = query(
+          collection(db, "Videos"),
+          orderBy("createdAt", "desc")
+        );
+
+        const snapshot = await getDocs(q);
+
+        const data = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        setVideos(data);
+      } catch (error) {
+        console.error("Error cargando videos:", error);
+      }
+    };
+
+    fetchVideos();
+  }, []);
+
   return (
     <SideMenu navigation={navigation}>
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>HOME SCREEN</Text>
-      </View>
+      <FlatList
+        data={videos}
+        keyExtractor={(item) => item.id}
+        
+        renderItem={({ item }) => (
+          <VideoCard
+            videoId={item.id}
+            title={item.title}
+            thumbnail={item.thumbnail}
+          />
+        )}
+      />
+      <FloatingAddButton
+        onAddVideo={() => console.log("Add video")}
+        onCreateList={() => console.log("Create list")}
+      />
     </SideMenu>
   );
 }

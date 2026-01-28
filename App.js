@@ -5,6 +5,10 @@ import { Platform } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as NavigationBar from "expo-navigation-bar";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./Firebase/firebase";
+import { createUserProfile } from "./components/createUserProfile";
+
 
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
@@ -24,6 +28,16 @@ export default function App() {
     }
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        createUserProfile();
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -37,7 +51,7 @@ export default function App() {
         <Stack.Screen name="Register" component={RegisterScreen} />
 
         {/* Main app */}
-        <Stack.Screen name="Home" component={HomeScreen}  />
+        <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Favorites" component={FavoritesScreen} />
         <Stack.Screen name="Lists" component={ListsScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />

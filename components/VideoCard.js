@@ -1,27 +1,49 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../styles/theme";
 
-export default function VideoCard({ title }) {
-  const [liked, setLiked] = useState(false); // estado para el corazón
+import {
+  addToFavorites,
+  removeFromFavorites,
+  isFavorite
+} from "../components/favoritesService";
 
-  const toggleLike = () => {
+export default function VideoCard({ title, thumbnail, videoId }) {
+  const [liked, setLiked] = useState(false);
+
+  useEffect(() => {
+    const checkFavorite = async () => {
+      const fav = await isFavorite(videoId);
+      setLiked(fav);
+    };
+
+    checkFavorite();
+  }, []);
+
+  const toggleLike = async () => {
+    if (liked) {
+      await removeFromFavorites(videoId);
+    } else {
+      await addToFavorites(videoId);
+    }
     setLiked(!liked);
   };
 
   return (
     <View style={styles.card}>
-      <View style={styles.thumbnail} />
+      <View style={styles.thumbnail}>
+        <Image source={{ uri: thumbnail }} style={styles.image} />
+      </View>
+
       <Text style={styles.title}>{title}</Text>
 
       <View style={styles.row}>
-        {/* Corazón tocable */}
         <TouchableOpacity onPress={toggleLike}>
           <Ionicons
-            name={liked ? "heart" : "heart-outline"} // icono relleno si está liked
+            name={liked ? "heart" : "heart-outline"}
             size={24}
-            color={liked ? "red" : colors.text} // rojo si liked
+            color={liked ? "red" : colors.text}
           />
         </TouchableOpacity>
 
@@ -30,6 +52,7 @@ export default function VideoCard({ title }) {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   card: {
@@ -41,7 +64,12 @@ const styles = StyleSheet.create({
   thumbnail: {
     height: 120,
     backgroundColor: "#000",
-    borderRadius: 10
+    borderRadius: 10,
+    overflow: "hidden"
+  },
+  image: {
+    width: "100%",
+    height: "100%"
   },
   title: {
     marginTop: 5,
