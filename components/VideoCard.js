@@ -59,7 +59,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.card,
     marginVertical: 10,
     borderRadius: 15,
-    padding: 10
+    padding: 10,
+    marginLeft: 20,
+    marginRight: 20,
   },
   thumbnail: {
     height: 120,
@@ -79,6 +81,6 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 5
+    marginTop: 5,
   }
 });
