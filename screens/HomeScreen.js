@@ -39,18 +39,21 @@ export default function HomeScreen({ navigation }) {
       <FlatList
         data={videos}
         keyExtractor={(item) => item.id}
-        
         renderItem={({ item }) => (
           <VideoCard
             videoId={item.id}
             title={item.title}
+            description={item.description}       // 🔹 descripción
             thumbnail={item.thumbnail}
+            youtubeId={item.youtubeId}
+            createdAt={item.createdAt?.toDate()}  // 🔹 fecha de creación
           />
         )}
       />
       <FloatingAddButton
         onAddVideo={() => console.log("Add video")}
         onCreateList={() => console.log("Create list")}
+        navigation={navigation}
       />
     </SideMenu>
   );

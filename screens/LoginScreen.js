@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { colors } from "../styles/theme";
-import { auth } from "../Firebase/firebase"; // tu archivo firebase.js
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../Firebase/firebase"; 
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState(""); // ahora usamos email en lugar de user
+  const [email, setEmail] = useState(""); 
   const [password, setPassword] = useState("");
 
   // Login
@@ -14,23 +14,10 @@ export default function LoginScreen({ navigation }) {
 
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
-        navigation.navigate("Home"); // login correcto
+        navigation.navigate("Home"); 
       })
       .catch((error) => {
         Alert.alert("Login failed", error.message);
-      });
-  };
-
-  // Crear usuario (si quieres un input para registrar)
-  const handleRegister = () => {
-    if (!email || !password) return Alert.alert("Error", "Completa los campos");
-
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        Alert.alert("Success", "Usuario creado");
-      })
-      .catch((error) => {
-        Alert.alert("Register failed", error.message);
       });
   };
 
@@ -58,7 +45,11 @@ export default function LoginScreen({ navigation }) {
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.button, { backgroundColor: "#7c3aed" }]} onPress={handleRegister}>
+      {/* Nuevo botón: solo navega a la pantalla de registro */}
+      <TouchableOpacity 
+        style={[styles.button, { backgroundColor: "#7c3aed" }]} 
+        onPress={() => navigation.navigate("Register")}
+      >
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
     </View>

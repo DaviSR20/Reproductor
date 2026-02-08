@@ -16,6 +16,8 @@ import RegisterScreen from "./screens/RegisterScreen";
 import FavoritesScreen from "./screens/FavoritesScreen";
 import ListsScreen from "./screens/ListsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import VideoPlayerScreen from "./screens/VideoPlayerScreen"
+import AddVideoScreen from "./screens/AddVideoScreen"
 
 const Stack = createStackNavigator();
 
@@ -51,6 +53,8 @@ export default function App() {
         <Stack.Screen name="Register" component={RegisterScreen} />
 
         {/* Main app */}
+        <Stack.Screen name="AddVideo" component={AddVideoScreen} />
+        <Stack.Screen name="VideoPlayer" component={VideoPlayerScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Favorites" component={FavoritesScreen} />
         <Stack.Screen name="Lists" component={ListsScreen} />

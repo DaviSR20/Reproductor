@@ -81,7 +81,6 @@ export default function FavoritesScreen({ navigation }) {
         <FlatList
           data={favorites}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={{ padding: 15 }}
           renderItem={({ item }) => (
             <VideoCard
               videoId={item.id}
